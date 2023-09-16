@@ -18,11 +18,9 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
   },
   phoneNumber: {
     type: Number,
-    required: true
   },
   residentialAddress: {
     type: String,
@@ -60,6 +58,9 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String
+  },
+  userType: {
+    type: String,
   }
 });
 module.exports = mongoose.model("User", userSchema);
