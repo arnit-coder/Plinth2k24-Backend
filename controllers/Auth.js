@@ -112,6 +112,7 @@ exports.login = async (req, res) => {
     const playload = {
       email: user.email,
       id: user._id,
+      userType: user.userType
     };
 
     //Generate JWT token
@@ -176,6 +177,7 @@ exports.loginWithNumber = async (req, res) => {
     const playload = {
       email: user.email,
       id: user._id,
+      userType: user.userType
     };
 
     //Generate JWT token
@@ -281,6 +283,41 @@ exports.verification = async (req, res, next) => {
       success:false,
       err,
       message: "Error while Authorization!"
+    });
+  }
+}
+
+exports.isUser = async (req, res, next) => {
+  try{
+    if(req.user.userType !== "User"){
+      return res.status(401).json({
+        success:false,
+        message:"You are not a valid user!"
+      });
+    }
+    next();
+  } catch(err){
+    return res.status(500).json({
+      success:false,
+      message: "Error while Authorization of Customer!"
+    });
+  }
+}
+
+//isAdmin
+exports.isAdmin = async (req, res, next) => {
+  try{
+    if(req.user.userType != "Admin"){
+      return res.status(401).json({
+        success:false,
+        message:"You are not a Admin!"
+      });
+    }
+    next();
+  } catch(err){
+    return res.status(500).json({
+      success:false,
+      message: "Error while Authorization of Admin!"
     });
   }
 }

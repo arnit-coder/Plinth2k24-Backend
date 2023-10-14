@@ -14,7 +14,7 @@ const mailSender = async (email, title, body) => {
 
     //Sending mail
     let info = await transporter.sendMail({
-      from: "Full Stack LoginSignup",
+      from: "Plinth2k24",
       to: `${email}`,
       subject: `${title}`,
       html: `${body}`,
@@ -23,7 +23,7 @@ const mailSender = async (email, title, body) => {
     return info;
   } catch (err) {
     console.log("Error while sending mail!");
-    console.log(err.message);
+    console.log(err);
   }
 };
 module.exports = mailSender;
