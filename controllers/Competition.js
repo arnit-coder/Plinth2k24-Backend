@@ -38,3 +38,16 @@ exports.CreateCompetition = async(req, res) => {
     res.status(500).json({ success:false, message: 'Error creating the competition' });
   }
 }
+
+exports.FetchAllCompetition = async(req, res) => {
+  try{
+    const competitions = await Competition.find().sort({ createdAt:-1}).populate("Contact").exec();
+    if(!competitions){
+      throw Error("No competitions found");
+      }
+    res.status(200).json({success:true, count:competitions.length, data:competitions})
+  } catch(err){
+    console.error(err);
+    res.status(500).json({ success:false, message: 'Error fetching the competitions' });
+  }
+}
