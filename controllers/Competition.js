@@ -1,4 +1,5 @@
 const Competition = require('../models/Competition');
+const Contact = require('../models/Contact');
 
 exports.CreateCompetition = async(req, res) => {
   try{
@@ -16,6 +17,12 @@ exports.CreateCompetition = async(req, res) => {
     if (!clubOrganizingName || !time || !nameOfCompetition || !image || !soloOrTeam || !about || !prize || !rulebook || !contacts) {
       return res.status(400).json({ message: 'All fields are required' });
     }
+    const contactObjects = [];
+    for (const contactInfo of contacts) {
+      const { name, number } = contactInfo;
+      const contact = new Contact({ name, number });
+      contactObjects.push(await contact.save());
+    }
     const competition = new Competition({
       clubOrganizingName,
       time,
@@ -25,7 +32,7 @@ exports.CreateCompetition = async(req, res) => {
       about,
       prize,
       rulebook,
-      contacts,
+      contacts: contactObjects.map(contact => contact._id),
     });
     const newCompetition = await competition.save();
 
