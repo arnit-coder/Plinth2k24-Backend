@@ -1,0 +1,18 @@
+TODO 
+1. 
+
+
+
+
+
+
+
+
+ISSUES (## -> resolevd)
+1. Don't send otp to frontend in the response of auth/sendotp (the person can enter the otp without having to check the mail and can enter using wrong mail also cuz he is getting the otp in the broswer )
+
+2. auth/sendotp route is giving response as 200 even if the mail is not sent  (it should give 400)
+
+## 3. OTP is not saving in the database . 
+
+4. 
