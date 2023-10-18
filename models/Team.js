@@ -12,11 +12,13 @@ const userSchema = new mongoose.Schema({
   },
   teamCode: {
     type: Number,
-    default: Math.random()*10000
+    default: Math.random() * 10000,
   },
-  members: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }]
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 module.exports = mongoose.model("User", userSchema);

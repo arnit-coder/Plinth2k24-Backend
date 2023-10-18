@@ -1,7 +1,7 @@
 const Team = require('../models/Team');
 const Contact = require('../models/Contact');
 
-exports.CreateCompetition = async(req, res) => {
+exports.createTeam = async(req, res) => {
   try{
     const {
       clubOrganizingName,
@@ -46,7 +46,7 @@ exports.CreateCompetition = async(req, res) => {
   }
 }
 
-exports.FetchAllCompetition = async(req, res) => {
+exports.deleteTeam = async(req, res) => {
   try{
     const competitions = await Competition.find().sort({ createdAt:-1}).populate("Contact").exec();
     if(!competitions){
