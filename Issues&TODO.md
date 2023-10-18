@@ -6,7 +6,7 @@
 
 4. competition -> updateCompetition 
 
-5. ~~update the googleauth to store the cookies in correct place . ~~
+5. ~update the googleauth to store the cookies in correct place . 
 
 
 
