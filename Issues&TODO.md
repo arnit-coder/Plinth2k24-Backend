@@ -1,7 +1,8 @@
 # TODO 
-1. team -> getAllTeams (admin only )
-2. team -> deleteTeam (team Leader  only )
-3. team -> getMyTeam (team members only )
+1. ~~team -> getAllTeams (admin only )~~
+2. ~~team -> deleteTeam (team Leader  only )~~
+3. ~~team -> getMyTeam (team members only )~~
+4. ~~team -> createTeam(mark the creator as team leader )~~
 
 
 4. competition -> updateCompetition 
@@ -24,4 +25,5 @@
 
 3. ~~for the team Schema the members is an array of object so checking every array for every team for each user will be computationally expensive . So we can add an array of team codes in the user schema to simplify the process~~
 
-4. 
+4. the user type in user schema is tupple `["google","email"]` and not the `["admin","user"]` there was a `role` in the user schema for this 
+

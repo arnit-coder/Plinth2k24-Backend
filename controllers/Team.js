@@ -104,5 +104,26 @@ exports.getAllTeams = async (req, res) => {
 };
 
 //get user team for the user
+exports.getYourTeam = async (req, res) => {
+  try {
+    const currentUserId = req.user._id;
+    const currentUser = await User.findById(currentUserId);
+    const teams = currentUser.teams;
+    const teamObjects = [];
+
+    for(const team of teams){
+      const teamObject = await Team.findById(team);
+      teamObjects.push(teamObject);
+    }
+
+    res.status(200).json({ success: true, data: teamObjects });
+
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching the teams" });
+  }
+};
 
 //fetchYourTeam function to fetch the team of the user , any teammate can fetch the team and leader can also fetch the team
