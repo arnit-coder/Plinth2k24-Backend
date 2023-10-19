@@ -1,60 +1,69 @@
-const Team = require('../models/Team');
-const Contact = require('../models/Contact');
+const Team = require("../models/Team");
+const User = require("../models/User");
 
-exports.createTeam = async(req, res) => {
-  try{
-    const {
-      clubOrganizingName,
-      time,
-      nameOfCompetition,
-      image,
-      soloOrTeam,
-      about,
-      prize,
-      rulebook,
-      contacts,
-    } = req.body;
-    if (!clubOrganizingName || !time || !nameOfCompetition || !image || !soloOrTeam || !about || !prize || !rulebook || !contacts) {
-      return res.status(400).json({ message: 'All fields are required' });
+exports.createTeam = async (req, res) => {
+  try {
+    //members is an array of emails of the members
+    const { name, members } = req.body;
+    if (!name || !members) {
+      return res.status(400).json({ message: "All fields are required" });
     }
-    const contactObjects = [];
-    for (const contactInfo of contacts) {
-      const { name, number } = contactInfo;
-      const contact = new Contact({ name, number });
-      contactObjects.push(await contact.save());
+
+    const membersObjects = [];
+
+    for (const member of members) {
+      membersObjects.push(await User.findOne({ email: member }));
     }
-    const competition = new Competition({
-      clubOrganizingName,
-      time,
-      nameOfCompetition,
-      image,
-      soloOrTeam,
-      about,
-      prize,
-      rulebook,
-      contacts: contactObjects.map(contact => contact._id),
+
+    const team = new Team({
+      name: name,
+      leader: req.user._id,
+      members: membersObjects.map((member) => member._id),
     });
-    const newCompetition = await competition.save();
 
+    const newTeam = await team.save();
+
+    // update the leader
+
+    const teams = req.user.teams;
+    teams.push(newTeam._id);
+    await User.findByIdAndUpdate(req.user._id, { teams: teams });
+
+    // update the members
+    for (const member of membersObjects) {
+      const teams = member.teams;
+      teams.push(newTeam._id);
+      await User.findByIdAndUpdate(member._id, { teams: teams });
+    }
     res.status(201).json({
       success: true,
-      data: newCompetition,
+      data: newTeam,
     });
-  } catch(err){
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ success:false, message: 'Error creating the competition' });
+    res
+      .status(500)
+      .json({ success: false, message: "Error creating the team" });
   }
-}
+};
 
-exports.deleteTeam = async(req, res) => {
-  try{
-    const competitions = await Competition.find().sort({ createdAt:-1}).populate("Contact").exec();
-    if(!competitions){
-      throw Error("No competitions found");
-      }
-    res.status(200).json({success:true, count:competitions.length, data:competitions})
-  } catch(err){
+exports.deleteTeam = async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id);
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+    if (team.leader.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "You are not the leader" });
+    }
+    await Team.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, message: "Team deleted" });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ success:false, message: 'Error fetching the competitions' });
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching the competitions" });
   }
-}
+};
+
+//fetchYourTeam function to fetch the team of the user , any teammate can fetch the team and leader can also fetch the team

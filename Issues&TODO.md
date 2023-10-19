@@ -21,4 +21,4 @@
 
 2. auth/sendotp route is giving response as 200 even if the mail is not sent  (it should give 400)
 
-3. 
+3. for the team Schema the members is an array of object so checking every array for every team for each user will be computationally expensive . So we can add an array of team codes in the user schema to simplify the process .

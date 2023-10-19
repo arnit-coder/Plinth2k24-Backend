@@ -10,10 +10,6 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  teamCode: {
-    type: Number,
-    default: Math.random() * 10000,
-  },
   members: [
     {
       type: mongoose.Schema.Types.ObjectId,

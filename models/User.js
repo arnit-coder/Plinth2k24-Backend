@@ -62,6 +62,13 @@ const userSchema = new mongoose.Schema({
   userType: {
     type: String,
     default: "User"
-  }
+  },
+  teams : [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+      default: []
+    },
+  ],
 });
 module.exports = mongoose.model("User", userSchema);

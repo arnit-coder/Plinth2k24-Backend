@@ -1,8 +1,8 @@
-const Competition = require('../models/Competition');
-const Contact = require('../models/Contact');
+const Competition = require("../models/Competition");
+const Contact = require("../models/Contact");
 
-exports.CreateCompetition = async(req, res) => {
-  try{
+exports.CreateCompetition = async (req, res) => {
+  try {
     const {
       clubOrganizingName,
       time,
@@ -14,8 +14,18 @@ exports.CreateCompetition = async(req, res) => {
       rulebook,
       contacts,
     } = req.body;
-    if (!clubOrganizingName || !time || !nameOfCompetition || !image || !soloOrTeam || !about || !prize || !rulebook || !contacts) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (
+      !clubOrganizingName ||
+      !time ||
+      !nameOfCompetition ||
+      !image ||
+      !soloOrTeam ||
+      !about ||
+      !prize ||
+      !rulebook ||
+      !contacts
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
     }
     const contactObjects = [];
     for (const contactInfo of contacts) {
@@ -32,7 +42,7 @@ exports.CreateCompetition = async(req, res) => {
       about,
       prize,
       rulebook,
-      contacts: contactObjects.map(contact => contact._id),
+      contacts: contactObjects.map((contact) => contact._id),
     });
     const newCompetition = await competition.save();
 
@@ -40,21 +50,30 @@ exports.CreateCompetition = async(req, res) => {
       success: true,
       data: newCompetition,
     });
-  } catch(err){
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ success:false, message: 'Error creating the competition' });
+    res
+      .status(500)
+      .json({ success: false, message: "Error creating the competition" });
   }
-}
+};
 
-exports.FetchAllCompetition = async(req, res) => {
-  try{
-    const competitions = await Competition.find().sort({ createdAt:-1}).populate("Contact").exec();
-    if(!competitions){
+exports.FetchAllCompetition = async (req, res) => {
+  try {
+    const competitions = await Competition.find()
+      .sort({ createdAt: -1 })
+      .populate("Contact")
+      .exec();
+    if (!competitions) {
       throw Error("No competitions found");
-      }
-    res.status(200).json({success:true, count:competitions.length, data:competitions})
-  } catch(err){
+    }
+    res
+      .status(200)
+      .json({ success: true, count: competitions.length, data: competitions });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ success:false, message: 'Error fetching the competitions' });
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching the competitions" });
   }
-}
+};
