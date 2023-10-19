@@ -60,20 +60,28 @@ exports.CreateCompetition = async (req, res) => {
 
 exports.FetchAllCompetition = async (req, res) => {
   try {
-    const competitions = await Competition.find()
-      .sort({ createdAt: -1 })
-      .populate("Contact")
-      .exec();
-    if (!competitions) {
-      throw Error("No competitions found");
-    }
-    res
-      .status(200)
-      .json({ success: true, count: competitions.length, data: competitions });
+    const allComeptition = Competition.find({});
+    res.status(200).send(allComeptition);
   } catch (err) {
     console.error(err);
     res
       .status(500)
       .json({ success: false, message: "Error fetching the competitions" });
   }
+};
+
+exports.UpdateCompetition = async (req, res) => {
+  try {
+    const {
+      clubOrganizingName,
+      time,
+      nameOfCompetition,
+      image,
+      soloOrTeam,
+      about,
+      prize,
+      rulebook,
+      contacts,
+    } = req.body;
+  } catch (err) {}
 };

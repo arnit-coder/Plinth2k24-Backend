@@ -16,5 +16,9 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  competition: {
+    type: String,
+    required: true,
+  },
 });
 module.exports = mongoose.model("User", userSchema);
