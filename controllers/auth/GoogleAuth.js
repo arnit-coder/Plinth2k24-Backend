@@ -18,7 +18,7 @@ exports.googleSignIn = async (req, res) => {
       })
       .then(async (response) => {
         const email = response.data.email;
-        const user = await User.findOne({ email, userType: "google" });
+        const user = await User.findOne({ email });
         if (!user)
           return res.status(404).json({ message: "User doesn't exist!" });
 
@@ -90,7 +90,7 @@ exports.googleSignUp = async (req, res) => {
         const email = response.data.email;
         const picture = response.data.picture;
 
-        const existingUser = await User.findOne({ email, userType: "google" });
+        const existingUser = await User.findOne({ email });
 
         console.log("hello");
 
@@ -103,7 +103,6 @@ exports.googleSignUp = async (req, res) => {
           email,
           firstName,
           lastName,
-          userType: "google",
           image: picture,
         });
 
