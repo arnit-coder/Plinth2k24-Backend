@@ -17,7 +17,8 @@ const teamSchema = new mongoose.Schema({
     },
   ],
   competition: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Competition",
     required: true,
   },
 });

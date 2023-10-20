@@ -13,6 +13,8 @@
 
 7. change the otp template . 
 
+8. make the auth code modular by making some functions like sendtoken in a sepearte utils folder 
+
 
 
 # Queries 
@@ -29,6 +31,8 @@
 3. ~~for the team Schema the members is an array of object so checking every array for every team for each user will be computationally expensive . So we can add an array of team codes in the user schema to simplify the process~~
 
 4.  ~~the user type in user schema is tupple `["google","email"]` and not the `["admin","user"]` there was a `role` in the user schema for this~~ -> temproary fixed ....will fix this later 
+
+5. ~~while registering a team make sure the members are not currently participating in the same competition before~~
 
 
 

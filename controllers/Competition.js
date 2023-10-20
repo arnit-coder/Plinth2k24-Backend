@@ -61,8 +61,10 @@ exports.CreateCompetition = async (req, res) => {
 
 exports.FetchAllCompetition = async (req, res) => {
   try {
-    const allComeptition = Competition.findById();
-    res.status(200).send(allComeptition);
+    const allComeptition = await  Competition.find({}).populate("contacts").exec();
+    allComeptition.teams = [];
+    
+    res.status(200).json(allComeptition);
   } catch (err) {
     console.error(err);
     res
@@ -71,6 +73,7 @@ exports.FetchAllCompetition = async (req, res) => {
   }
 };
 
+//!TODO: Update the competition
 exports.UpdateCompetition = async (req, res) => {
   try {
     const {

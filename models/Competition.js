@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Define a schema for the competition model
 const competitionSchema = new mongoose.Schema({
@@ -15,11 +15,11 @@ const competitionSchema = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: String, 
+    type: String,
   },
   soloOrTeam: {
     type: String,
-    enum: ['Solo', 'Team'],
+    enum: ["Solo", "Team"],
     required: true,
   },
   about: {
@@ -31,13 +31,20 @@ const competitionSchema = new mongoose.Schema({
     required: true,
   },
   rulebook: {
-    type: String, 
+    type: String,
   },
-  contacts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Contact"
-  }],
+  contacts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contact",
+    },
+  ],
+  teams: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+    },
+  ],
 });
 
-module.exports = mongoose.model('Competition', competitionSchema);
-
+module.exports = mongoose.model("Competition", competitionSchema);

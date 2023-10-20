@@ -1,3 +1,4 @@
+const Competition = require("../models/Competition");
 const Team = require("../models/Team");
 const User = require("../models/User");
 
@@ -12,8 +13,32 @@ exports.createTeam = async (req, res) => {
     const membersObjects = [];
 
     for (const member of members) {
-      const userObject = await User.findOne({ email: member });
+      const userObject = await User.findOne({ email: member }).populate(
+        "teams"
+      );
       membersObjects.push(userObject);
+      if (
+        userObject.teams.map((team) => 
+          team.competition.toString() === competition.toString() ? true : false
+        )
+      ) {
+        return res.status(400).json({
+          message: "Some member is alreday registerd for this competition ",
+        });
+      }
+    }
+
+    const currentUser = await User.findById(req.user._id).populate("teams");
+    currentUser.teams.push(newTeam._id);
+    if (
+      currentUser.teams.map(
+        (team) => team.competition.toString() == competition.toString()
+      )
+    ) {
+      return res.status(400).json({
+        message:
+          "The leader of this team has already been registerd for this competition ",
+      });
     }
 
     const team = new Team({
@@ -24,22 +49,17 @@ exports.createTeam = async (req, res) => {
     });
 
     const newTeam = await team.save();
-    console.log(newTeam)
-    // update the leader
 
-    const teams = await User.findOne(req.user._id)
-      .select("teams")
-      .lean()
-      .exec();
+    const currentCompetition = await Competition.findById(competition);
 
-    // teams.push(newTeam._id);
-    await User.findOneAndUpdate(req.user._id, { teams: teams });
+    currentCompetition.teams.push(newTeam._id);
+    currentCompetition.save();
 
     // update the members
     for (const member of membersObjects) {
       const teams = member.teams;
       teams.push(newTeam._id);
-      await User.findOneAndUpdate(member._id, { teams: teams });
+      await User.findByIdAndUpdate(member._id, { teams: teams });
     }
     res.status(201).json({
       success: true,

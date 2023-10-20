@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.post("/createCompetition", verification, isAdmin, CreateCompetition);
-router.get("/fetchAllCompetition", verification, FetchAllCompetition);
+router.get("/fetchAllCompetition", FetchAllCompetition);
 router.post("/updateCompetition", verification, isAdmin, UpdateCompetition);
 
 module.exports = router;

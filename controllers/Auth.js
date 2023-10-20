@@ -111,7 +111,7 @@ exports.login = async (req, res) => {
     //Create a playload
     const playload = {
       email: user.email,
-      id: user._id,
+      _id: user._id,
       userType: user.userType
     };
 
@@ -176,7 +176,7 @@ exports.loginWithNumber = async (req, res) => {
     //Create a playload
     const playload = {
       email: user.email,
-      id: user._id,
+      _id: user._id,
       userType: user.userType
     };
 
