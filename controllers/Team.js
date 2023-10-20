@@ -12,7 +12,8 @@ exports.createTeam = async (req, res) => {
     const membersObjects = [];
 
     for (const member of members) {
-      membersObjects.push(await User.findOne({ email: member }));
+      const userObject = await User.findOne({ email: member });
+      membersObjects.push(userObject);
     }
 
     const team = new Team({
@@ -23,18 +24,22 @@ exports.createTeam = async (req, res) => {
     });
 
     const newTeam = await team.save();
-
+    console.log(newTeam)
     // update the leader
 
-    const teams = req.user.teams;
-    teams.push(newTeam._id);
-    await User.findByIdAndUpdate(req.user._id, { teams: teams });
+    const teams = await User.findOne(req.user._id)
+      .select("teams")
+      .lean()
+      .exec();
+
+    // teams.push(newTeam._id);
+    await User.findOneAndUpdate(req.user._id, { teams: teams });
 
     // update the members
     for (const member of membersObjects) {
       const teams = member.teams;
       teams.push(newTeam._id);
-      await User.findByIdAndUpdate(member._id, { teams: teams });
+      await User.findOneAndUpdate(member._id, { teams: teams });
     }
     res.status(201).json({
       success: true,
@@ -111,13 +116,12 @@ exports.getYourTeam = async (req, res) => {
     const teams = currentUser.teams;
     const teamObjects = [];
 
-    for(const team of teams){
+    for (const team of teams) {
       const teamObject = await Team.findById(team);
       teamObjects.push(teamObject);
     }
 
     res.status(200).json({ success: true, data: teamObjects });
-
   } catch (err) {
     console.error(err);
     res
