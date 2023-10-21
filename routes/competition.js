@@ -4,11 +4,13 @@ const {
   CreateCompetition,
   FetchAllCompetition,
   UpdateCompetition,
+  DeleteCompetition,
 } = require("../controllers/Competition");
 const router = express.Router();
 
 router.post("/createCompetition", verification, isAdmin, CreateCompetition);
 router.get("/fetchAllCompetition", FetchAllCompetition);
 router.post("/updateCompetition", verification, isAdmin, UpdateCompetition);
+router.post('/deleteCompetition', verification, isAdmin, DeleteCompetition)
 
 module.exports = router;

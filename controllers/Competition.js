@@ -28,6 +28,10 @@ exports.CreateCompetition = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    const compName = Competition.findOne({nameOfCompetition: nameOfCompetition});
+    if(compName){
+      return res.status(409).json({message:'This competition already exists', success: false});
+    }
     const contactObjects = [];
     for (const contactInfo of contacts) {
       const { name, number } = contactInfo;
@@ -73,19 +77,45 @@ exports.FetchAllCompetition = async (req, res) => {
   }
 };
 
-//!TODO: Update the competition
 exports.UpdateCompetition = async (req, res) => {
   try {
-    const {
-      clubOrganizingName,
-      time,
-      nameOfCompetition,
-      image,
-      soloOrTeam,
-      about,
-      prize,
-      rulebook,
-      contacts,
-    } = req.body;
-  } catch (err) {}
+    const {updateFields, competitionId} = req.body;
+    const existingCompetition = await Competition.findById(competitionId);
+
+    if (!existingCompetition) {
+      return res.status(404).json({ message: "Competition not found", success: false });
+    }
+
+    for (const field in updateFields) {
+      if (Object.prototype.hasOwnProperty.call(updateFields, field)) {
+        existingCompetition[field] = updateFields[field];
+      }
+    }
+    const updatedCompetition = await existingCompetition.save();
+
+    res.status(200).json({
+      success: true,
+      data: updatedCompetition,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Error updating the competition" });
+  }
+};
+
+exports.DeleteCompetition = async (req, res) => {
+	try {
+		const { competitionId } = req.body;
+		const details = await Competition.findByIdAndDelete(competitionId);
+		res.status(201).json({
+			success: true,
+			details,
+			message: "Competition Removed",
+		});
+	} catch (err) {
+		console.error(err);
+		res
+			.status(500)
+			.json({ success: false, message: "Error deleting the competition" });
+	}
 };
