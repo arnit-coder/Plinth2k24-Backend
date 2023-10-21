@@ -34,5 +34,5 @@
 
 5. ~~while registering a team make sure the members are not currently participating in the same competition before~~
 
-
+6. change the createTeam controller on the basis of soloOrTeam and team size in the competition . suggestion **We can change the soloOrTeam to number from the enum so it will store the max team size and if the array of members taken during the team registraion is smaller than that size then we will allow otherwise throw error** 
 
