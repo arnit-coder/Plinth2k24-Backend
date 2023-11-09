@@ -33,6 +33,12 @@ const competitionSchema = new mongoose.Schema({
   rulebook: {
     type: String,
   },
+  minTeamMembers: {
+    type: Number
+  },
+  maxTeamMembers: {
+    type: Number
+  },
   contacts: [
     {
       type: mongoose.Schema.Types.ObjectId,

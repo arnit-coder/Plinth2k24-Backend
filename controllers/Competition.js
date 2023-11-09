@@ -12,6 +12,8 @@ exports.CreateCompetition = async (req, res) => {
       soloOrTeam,
       about,
       prize,
+      minTeamMembers,
+      maxTeamMembers,
       rulebook,
       contacts,
     } = req.body;
@@ -24,7 +26,9 @@ exports.CreateCompetition = async (req, res) => {
       !about ||
       !prize ||
       !rulebook ||
-      !contacts
+      !contacts || 
+      !minTeamMembers ||
+      !maxTeamMembers
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -46,6 +50,8 @@ exports.CreateCompetition = async (req, res) => {
       soloOrTeam,
       about,
       prize,
+      minTeamMembers,
+      maxTeamMembers,
       rulebook,
       contacts: contactObjects.map((contact) => contact._id),
     });
