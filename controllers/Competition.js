@@ -3,7 +3,7 @@ const Contact = require("../models/Contact");
 
 exports.CreateCompetition = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const {
       clubOrganizingName,
       time,
@@ -28,6 +28,7 @@ exports.CreateCompetition = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    console.log("works");
     const contactObjects = [];
     for (const contactInfo of contacts) {
       const { name, number } = contactInfo;
@@ -61,9 +62,11 @@ exports.CreateCompetition = async (req, res) => {
 
 exports.FetchAllCompetition = async (req, res) => {
   try {
-    const allComeptition = await  Competition.find({}).populate("contacts").exec();
+    const allComeptition = await Competition.find({})
+      .populate("contacts")
+      .exec();
     allComeptition.teams = [];
-    
+
     res.status(200).json(allComeptition);
   } catch (err) {
     console.error(err);
