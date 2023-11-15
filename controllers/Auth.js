@@ -10,7 +10,7 @@ exports.signUp = async (req, res) => {
     const { firstName, lastName, email, password, phoneNumber, otp } = req.body;
 
     //Validating
-    if (!firstName || !lastName || !email || !password || !phoneNumber || !otp) {
+    if (!firstName || !lastName || !email || !password || !otp) {
       return res.status(400).json({
         message: "Please provide all the required fields",
         success: false,
