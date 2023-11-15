@@ -5,7 +5,7 @@ const mailSender = async (email, title, body) => {
   try {
     //Creating a transporter
     let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
+      host: "smtp.gmail.com",
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
