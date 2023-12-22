@@ -9,6 +9,10 @@ exports.createTeam = async (req, res) => {
     if (!name || !members || !competition) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    const currentCompetition = await Competition.findById(competition);
+    if(members.length > currentCompetition.maxTeamMembers || members.length < currentCompetition.minTeamMembers){
+      return res.status(400).json({ message: "Not valid number of members!" });
+    }
 
     const membersObjects = [];
 
@@ -44,12 +48,10 @@ exports.createTeam = async (req, res) => {
     });
 
     const newTeam = await team.save();
-
     currentUser.teams.push(newTeam._id);
     currentUser.save();
 
     const currentCompetition = await Competition.findById(competition);
-
     currentCompetition.teams.push(newTeam._id);
     currentCompetition.save();
 
