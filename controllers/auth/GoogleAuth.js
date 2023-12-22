@@ -4,10 +4,9 @@ const axios = require("axios");
 const User = require("../../models/User");
 
 exports.googleSignIn = async (req, res) => {
+  //checking if the googleAccessToken is present in the request body
   if (req.body.googleAccessToken) {
-
     const { googleAccessToken } = req.body;
-
     axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: {
@@ -25,7 +24,7 @@ exports.googleSignIn = async (req, res) => {
           _id: user._id,
           userType: user.userType,
         };
-
+  
         const token = jwt.sign(playload, process.env.JWT_SECRET, {
           expiresIn: "2h",
         });
@@ -91,19 +90,16 @@ exports.googleSignUp = async (req, res) => {
           _id: user._id,
           userType: user.userType,
         };
-
+        
         const token = jwt.sign(playload, process.env.JWT_SECRET, {
           expiresIn: "2h",
         });
         user.token = token;
-
         console.log(token);
-
         const options = {
           expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
           httpOnly: true,
         };
-
         res.cookie("token", token, options).status(200).json({
           success: true,
           token,

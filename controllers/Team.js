@@ -21,29 +21,24 @@ exports.createTeam = async (req, res) => {
         "teams"
       );
       membersObjects.push(userObject);
-      if (
-        userObject.teams.map((team) => 
-          team.competition.toString() === competition.toString() ? true : false
-        )
-      ) {
+      for (const team of userObject.teams) {
+        if (team.competition == competition) {
+          return res.status(400).json({
+            message: "Some member is alreday registerd for this competition ",
+          });
+        }
+      }
+    }
+    const currentUser = await User.findById(req.user._id).populate("teams");
+
+    for(const team of currentUser.teams){
+      if(team.competition == competition){
         return res.status(400).json({
-          message: "Some member is alreday registerd for this competition ",
+          message: "The leader of this team has already been registerd for this competition",
         });
       }
     }
 
-    const currentUser = await User.findById(req.user._id).populate("teams");
-    currentUser.teams.push(newTeam._id);
-    if (
-      currentUser.teams.map(
-        (team) => team.competition.toString() == competition.toString()
-      )
-    ) {
-      return res.status(400).json({
-        message:
-          "The leader of this team has already been registerd for this competition ",
-      });
-    }
 
     const team = new Team({
       name: name,
@@ -53,7 +48,10 @@ exports.createTeam = async (req, res) => {
     });
 
     const newTeam = await team.save();
+    currentUser.teams.push(newTeam._id);
+    currentUser.save();
 
+    const currentCompetition = await Competition.findById(competition);
     currentCompetition.teams.push(newTeam._id);
     currentCompetition.save();
 

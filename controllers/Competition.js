@@ -3,7 +3,7 @@ const Contact = require("../models/Contact");
 
 exports.CreateCompetition = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const {
       clubOrganizingName,
       time,
@@ -71,9 +71,11 @@ exports.CreateCompetition = async (req, res) => {
 
 exports.FetchAllCompetition = async (req, res) => {
   try {
-    const allComeptition = await  Competition.find({}).populate("contacts").exec();
+    const allComeptition = await Competition.find({})
+      .populate("contacts")
+      .exec();
     allComeptition.teams = [];
-    
+
     res.status(200).json(allComeptition);
   } catch (err) {
     console.error(err);
