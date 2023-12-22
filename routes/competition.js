@@ -7,7 +7,7 @@ const {
 } = require("../controllers/Competition");
 const router = express.Router();
 
-router.post("/createCompetition", CreateCompetition);
+router.post("/createCompetition", verification, isAdmin, CreateCompetition);
 router.get("/fetchAllCompetition", FetchAllCompetition);
 router.post("/updateCompetition", verification, isAdmin, UpdateCompetition);
 
