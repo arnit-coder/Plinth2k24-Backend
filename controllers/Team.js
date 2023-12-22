@@ -51,17 +51,17 @@ exports.createTeam = async (req, res) => {
     currentUser.teams.push(newTeam._id);
     currentUser.save();
 
-    const currentCompetition = await Competition.findById(competition);
-    currentCompetition.teams.push(newTeam._id);
-    currentCompetition.save();
+    // const currentCompetition = await Competition.findById(competition);
+    // currentCompetition.teams.push(newTeam._id);
+    // currentCompetition.save();
 
-    // update the members
-    for (const member of membersObjects) {
-      const teams = member.teams;
-      teams.push(newTeam._id);
-      await User.findByIdAndUpdate(member._id, { teams: teams });
-    }
-    res.status(201).json({
+    // // update the members
+    // for (const member of membersObjects) {
+    //   const teams = member.teams;
+    //   teams.push(newTeam._id);
+    //   await User.findByIdAndUpdate(member._id, { teams: teams });
+    // }
+    return res.status(201).json({
       success: true,
       data: newTeam,
     });
