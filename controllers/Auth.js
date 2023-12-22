@@ -104,7 +104,7 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(403).json({
         success: false,
-        message: "please enter correct password",
+        message: "Please enter correct password",
       });
     }
 
