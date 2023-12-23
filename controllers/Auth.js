@@ -272,9 +272,10 @@ exports.verification = async (req, res, next) => {
         });
     }
     try{
-      const decoded= await jwt.verify(token, process.env.JWT_SECRET);
+      const decoded= await jwt.verify(token.replace(/^"(.*)"$/, '$1'), process.env.JWT_SECRET);
       req.user=decoded;
     } catch(err){
+      console.log(err)
       return res.status(401).json({
         success:false,
         err,

@@ -17,25 +17,26 @@ exports.CreateCompetition = async (req, res) => {
       rulebook,
       contacts,
     } = req.body;
-    if (
-      !clubOrganizingName ||
-      !time ||
-      !nameOfCompetition ||
-      !image ||
-      !soloOrTeam ||
-      !about ||
-      !prize ||
-      !rulebook ||
-      !contacts || 
-      !minTeamMembers ||
-      !maxTeamMembers
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    const compName = Competition.findOne({nameOfCompetition: nameOfCompetition});
-    if(compName){
-      return res.status(409).json({message:'This competition already exists', success: false});
-    }
+    // if (
+    //   !clubOrganizingName ||
+    //   !time ||
+    //   !nameOfCompetition ||
+    //   !image ||
+    //   !soloOrTeam ||
+    //   !about ||
+    //   !prize ||
+    //   !rulebook ||
+    //   !contacts || 
+    //   !minTeamMembers ||
+    //   !maxTeamMembers
+    // ) {
+    //   return res.status(400).json({ message: "All fields are required" });
+    // }
+    const compName = await Competition.findOne({nameOfCompetition: nameOfCompetition});
+    // if(compName){
+    //   console.log(compName)
+    //   return res.status(409).json({message:'This competition already exists', success: false});
+    // }
     const contactObjects = [];
     for (const contactInfo of contacts) {
       const { name, number } = contactInfo;
@@ -57,13 +58,13 @@ exports.CreateCompetition = async (req, res) => {
     });
     const newCompetition = await competition.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       data: newCompetition,
     });
   } catch (err) {
     console.error(err);
-    res
+    return res
       .status(500)
       .json({ success: false, message: "Error creating the competition" });
   }
@@ -76,10 +77,10 @@ exports.FetchAllCompetition = async (req, res) => {
       .exec();
     allComeptition.teams = [];
 
-    res.status(200).json(allComeptition);
+    return res.status(200).json(allComeptition);
   } catch (err) {
     console.error(err);
-    res
+    return res
       .status(500)
       .json({ success: false, message: "Error fetching the competitions" });
   }
@@ -101,13 +102,13 @@ exports.UpdateCompetition = async (req, res) => {
     }
     const updatedCompetition = await existingCompetition.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: updatedCompetition,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Error updating the competition" });
+    return res.status(500).json({ success: false, message: "Error updating the competition" });
   }
 };
 
@@ -115,14 +116,14 @@ exports.DeleteCompetition = async (req, res) => {
 	try {
 		const { competitionId } = req.body;
 		const details = await Competition.findByIdAndDelete(competitionId);
-		res.status(201).json({
+		return res.status(201).json({
 			success: true,
 			details,
 			message: "Competition Removed",
 		});
 	} catch (err) {
 		console.error(err);
-		res
+		return res
 			.status(500)
 			.json({ success: false, message: "Error deleting the competition" });
 	}
