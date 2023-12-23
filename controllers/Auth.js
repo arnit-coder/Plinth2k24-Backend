@@ -247,14 +247,15 @@ exports.sendotp = async (req, res) => {
     //saving the object in db 
     otpBody.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'OTP sent Successfully!',
       success:true,
       otpBody
     })
 
   } catch(err){
-    res.status(500).json({
+    console.log(err)
+    return res.status(500).json({
       success:false,
       message: "Error while sending OTP in send otp controller",
     });
