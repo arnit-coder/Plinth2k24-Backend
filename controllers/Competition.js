@@ -128,3 +128,20 @@ exports.DeleteCompetition = async (req, res) => {
 			.json({ success: false, message: "Error deleting the competition" });
 	}
 };
+
+exports.FetchCompetitionOfClub = async (req, res) => {
+  try {
+    const { clubOrganizingName } = req.body;
+    const competitions = await Competition.find({
+      clubOrganizingName: clubOrganizingName,
+    })
+      .populate("contacts")
+      .exec();
+    return res.status(200).json(competitions);
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error fetching the competitions" });
+  }
+}
