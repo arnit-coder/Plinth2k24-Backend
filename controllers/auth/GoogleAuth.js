@@ -6,6 +6,7 @@ const User = require("../../models/User");
 exports.googleSignIn = async (req, res) => {
   //checking if the googleAccessToken is present in the request body
   if (req.body.googleAccessToken) {
+    console.log(googleAccessToken)
     const { googleAccessToken } = req.body;
     axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
