@@ -44,7 +44,7 @@ exports.resetPasswordToken = async (req, res) => {
     );
 
     //creating url
-    const url=`http://localhost:3000/reset-password/${token}`;
+    const url=`https://plinth.co.in/reset-password/${token}`;
 
     //Sending mail containing url
     await mailSender(
